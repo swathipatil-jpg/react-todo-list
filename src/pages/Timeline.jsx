@@ -136,12 +136,20 @@ export default function Timeline() {
                         <span className="text-slate-400 text-sm font-mono">
                           {index + 1}
                         </span>
-                        <span
-                          onClick={() => toggleTask(task.id)}
-                          className="cursor-pointer line-through text-slate-500 hover:text-slate-600"
-                        >
-                          {task.text}
-                        </span>
+                        <div className="flex flex-col">
+                          <span
+                            onClick={() => toggleTask(task.id)}
+                            className="cursor-pointer line-through text-slate-500 hover:text-slate-600"
+                          >
+                            {task.text}
+                          </span>
+                          {task.date && (
+                            <span className="text-xs text-slate-400">
+                              📅 {new Date(task.date).toLocaleDateString()}
+                              {task.time && ` | ⏰ ${task.time}`}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <Button
                         onClick={() => deleteTask(task.id)}

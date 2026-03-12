@@ -30,7 +30,7 @@ export default function TaskItem({ task, toggleTask, deleteTask }) {
 
   return (
     <div className="group">
-      <Card className="bg-white/80 backdrop-blur-sm border-slate-200 shadow-md hover:shadow-lg transition-all duration-200 p-4 flex justify-between items-center hover:scale-[1.02]">
+      <Card className="bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all duration-200 p-4 flex justify-between items-center hover:scale-[1.02] border border-slate-200">
         <div className="flex items-center gap-4 flex-1">
           <span
             onClick={() => toggleTask(task.id)}
@@ -46,11 +46,24 @@ export default function TaskItem({ task, toggleTask, deleteTask }) {
             >
               {task.text}
             </span>
-            {task.date && (
-              <span className="text-xs text-slate-500 mt-1">
-                📅 {new Date(task.date).toLocaleDateString()}
-              </span>
-            )}
+            
+            <div className="flex items-center gap-2 mt-1">
+              {task.date && (
+                <span className="text-xs text-slate-500">
+                  📅 {new Date(task.date).toLocaleDateString()}
+                </span>
+              )}
+              {task.time && (
+                <span className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  ⏰ {task.time}
+                </span>
+              )}
+              {task.alarm && (
+                <span className="text-xs text-red-500 bg-red-50 px-2 py-0.5 rounded font-medium" title="Alarm set">
+                  🔔 Alarm
+                </span>
+              )}
+            </div>
           </div>
 
           {getPriorityBadge(task.priority)}

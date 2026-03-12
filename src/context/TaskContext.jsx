@@ -1,24 +1,50 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const TaskContext = createContext();
 
 export function TaskProvider({ children }) {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      try {
+        return JSON.parse(savedTasks);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  });
 
-  const addTask = (text, date = null) => {
-    setTasks([...tasks, { id: Date.now(), text, done: false, date }]);
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = (text, date = null, time = null, alarm = false) => {
+    const taskDate = date || new Date().toISOString().split("T")[0];
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      { id: Date.now(), text, done: false, date: taskDate, time, alarm },
+    ]);
   };
 
   const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, done: !task.done } : task,
-      ),
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, done: !task.done } : task
+      )
     );
   };
 
   const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const dismissAlarm = (id) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, alarm: false } : task
+      )
+    );
   };
 
   const getTasksByDate = (date) => {
@@ -33,7 +59,7 @@ export function TaskProvider({ children }) {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, toggleTask, deleteTask, getTasksByDate }}
+      value={{ tasks, addTask, toggleTask, deleteTask, dismissAlarm, getTasksByDate }}
     >
       {children}
     </TaskContext.Provider>

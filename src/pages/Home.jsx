@@ -20,6 +20,7 @@ export default function Home() {
 
       <div className="relative z-10">
         <AddTask />
+
         <div className="space-y-3 mt-5">
           {tasks.length === 0 ? (
             <Card className="p-8 text-center bg-white/80 backdrop-blur-sm border-slate-200 shadow-lg">

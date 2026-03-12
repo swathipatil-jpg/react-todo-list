@@ -5,12 +5,14 @@ import Home from "./pages/Home";
 import Calendar from "./pages/Calendar";
 import Timeline from "./pages/Timeline";
 import { TaskProvider } from "./context/TaskContext";
+import AlarmSystem from "./components/AlarmSystem";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
 
   return (
     <TaskProvider>
+      <AlarmSystem />
       <Header />
 
       <div className="flex">
