@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from "react";
 
 const TaskContext = createContext();
@@ -19,11 +20,11 @@ export function TaskProvider({ children }) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const addTask = (text, date = null, time = null, alarm = false) => {
+  const addTask = (text, date = null, time = null, alarm = false, description = "") => {
     const taskDate = date || new Date().toISOString().split("T")[0];
     setTasks((prevTasks) => [
       ...prevTasks,
-      { id: Date.now(), text, done: false, date: taskDate, time, alarm },
+      { id: Date.now(), text, description, done: false, date: taskDate, time, alarm },
     ]);
   };
 
@@ -57,9 +58,17 @@ export function TaskProvider({ children }) {
     });
   };
 
+  const editTask = (id, newText, newDescription) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, text: newText, description: newDescription !== undefined ? newDescription : task.description } : task
+      )
+    );
+  };
+
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, toggleTask, deleteTask, dismissAlarm, getTasksByDate }}
+      value={{ tasks, addTask, toggleTask, deleteTask, dismissAlarm, getTasksByDate, editTask }}
     >
       {children}
     </TaskContext.Provider>
