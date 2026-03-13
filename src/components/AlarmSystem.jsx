@@ -57,26 +57,20 @@ export default function AlarmSystem() {
 
 
   const triggerAlarm = (task) => {
-
-    if (permission === "granted") {
-
-      new Notification("Task Alarm: " + task.text, {
-        body: "Your task time is now!",
-        icon: "/vite.svg"
-      });
-
-    }
-
     setActiveAlarms((prev) => {
-
       if (!prev.find((a) => a.id === task.id)) {
+        // Only show notification once when added to active alarms
+        if (permission === "granted") {
+          new Notification("Task Alarm: " + task.text, {
+            body: "Your task time is now!",
+            icon: "/vite.svg",
+            requireInteraction: true
+          });
+        }
         return [...prev, task];
       }
-
       return prev;
-
     });
-
   };
 
 
